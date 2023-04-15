@@ -21,7 +21,7 @@ torch.manual_seed(0)
 arg = argparse.ArgumentParser()
 
 arg.add_argument('-dataset',type=str, default='activemq', help='software project name (lowercase)')
-arg.add_argument('-batch_size', type=int, default=2048) # # 2048(至0.3)，4096, 8192(效果开始差了)
+arg.add_argument('-batch_size', type=int, default=2048)
 arg.add_argument('-num_epochs', type=int, default=40) # 10 ->
 arg.add_argument('-embed_dim', type=int, default=50, help='word embedding size')
 arg.add_argument('-word_gru_hidden_dim', type=int, default=32, help='word attention hidden size')# 64 -> 32
@@ -144,7 +144,7 @@ def train_model(dataset_name):
     model = model.cuda()
     model.sent_attention.word_attention.freeze_embeddings(False)
 
-    # 有些参数不要求被更新，即固定不变，不参与训练，需要手动设置这些参数的梯度属性为Fasle，并且在optimizer传参时筛选掉这些参数
+
     optimizer = optim.Adam(params=filter(lambda p: p.requires_grad, model.parameters()), lr=lr)
     # optimizer = optim.Adam([{'params':filter(lambda p: p.requires_grad, model.parameters()), 'lr':lr},
     #                         {'params':odeg.parameters()}])

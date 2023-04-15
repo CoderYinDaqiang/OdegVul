@@ -7,7 +7,7 @@ from gensim.models import Word2Vec
 
 from tqdm import tqdm
 
-from Model_Odeg_St import *
+from Model_Odeg_Se import *
 from my_util import *
 
 torch.manual_seed(0)

@@ -7,7 +7,7 @@ from gensim.models import Word2Vec
 
 from tqdm import tqdm
 
-from DeepLineDP_SAGE_model import *
+from Model_GraphSAGE_MultiConvolution import *
 from my_util import *
 
 torch.manual_seed(0)

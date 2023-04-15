@@ -16,13 +16,12 @@ from my_util import *
 
 from odegcn import ODEG
 
-# 模型，损失函数，dataloader的子集(特征和对应的标签)
 torch.manual_seed(0)
 
 arg = argparse.ArgumentParser()
 
 arg.add_argument('-dataset',type=str, default='activemq', help='software project name (lowercase)')
-arg.add_argument('-batch_size', type=int, default=8192) # # 2048(至0.3)，8192(越大效果越差)
+arg.add_argument('-batch_size', type=int, default=8192) #
 arg.add_argument('-num_epochs', type=int, default=40) # 10 ->
 arg.add_argument('-embed_dim', type=int, default=50, help='word embedding size')
 arg.add_argument('-word_gru_hidden_dim', type=int, default=16, help='word attention hidden size')# 64 -> 32
@@ -103,7 +102,7 @@ def train_model(dataset_name):
     if not os.path.exists(loss_dir):
         os.makedirs(loss_dir)
 
-    # train:activemq-5.0.0 valid:activemq-5.1.0
+
     train_rel = all_train_releases[dataset_name]
     valid_rel = all_eval_releases[dataset_name][0]
 
@@ -124,10 +123,10 @@ def train_model(dataset_name):
     x_valid_vec = vectorizer.transform(valid_code2d).toarray()
     pickle.dump(vectorizer, open(save_model_dir + re.sub('-.*', '', train_rel) + "-vectorizer.bin", 'wb'))
 
-    # 解决样本不均衡或类别不均衡问题
+
     sample_weights = compute_class_weight(class_weight = 'balanced', classes = np.unique(train_label), y = train_label)
 
-    # 赋予不同的权重，样本越少，权重越大，损失值越大，模型更注重少量样本的训练..
+
     weight_dict['defect'] = np.max(sample_weights)
     weight_dict['clean'] = np.min(sample_weights)
 
@@ -152,7 +151,7 @@ def train_model(dataset_name):
     model = model.cuda()
     model.sent_attention.word_attention.freeze_embeddings(False)
 
-    # 有些参数不要求被更新，即固定不变，不参与训练，需要手动设置这些参数的梯度属性为Fasle，并且在optimizer传参时筛选掉这些参数
+
     optimizer = optim.Adam(params=filter(lambda p: p.requires_grad, model.parameters()), lr=lr)
 
 

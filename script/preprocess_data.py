@@ -4,14 +4,13 @@ import numpy as np
 
 from my_util import *
 
-# 数据集(我们的基准文件级和行级缺陷数据集，包括 9 个软件研究系统的 32 个版本) 和 数据处理后保存位置
 data_root_dir = '../datasets/original/'
 save_dir = "../datasets/preprocessed_data/"
 
-# 减小词汇量，减少程序运行时间
+
 char_to_remove = ['+','-','*','/','=','++','--','\\','<str>','<char>','|','&','!']
 
-# 不存在保存路径则创建路径
+
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 

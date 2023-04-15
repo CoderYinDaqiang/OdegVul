@@ -201,7 +201,6 @@ for(p in projs)
   print(paste0('finished ',p))
 
 }
-
-final.line.level.result = all.line.result %>% group_by(target) %>% summarize(auc = mean(all.auc), balance_acc = mean(all.bal.acc), mcc = mean(all.mcc), f1 = (all.f1))
+final.line.level.result = all.line.result %>% group_by(target) %>% summarize(auc = round(mean(all.auc,na.rm=TRUE),4), balance_acc = round(mean(all.bal.acc,na.rm=TRUE),4), mcc = round(mean(all.mcc,na.rm=TRUE),4), f1 = round(mean(all.f1,na.rm=TRUE),4))
 
 

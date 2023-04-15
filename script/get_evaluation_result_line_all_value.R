@@ -140,6 +140,6 @@ GGNN.dp.result = get.line.level.eval.result(prediction_dir_GGNN, "GGNN")
 all.result = rbind(Odeg.dp.result, GATVul.dp.result, SAGEVul.dp.result, GCNVul.dp.result,
                    DeepLineDP.dp.result,LSTM.dp.result, GGNN.dp.result)
 print(is.data.frame(all.result))
-final.line.level.result = all.result %>% group_by(technique) %>% summarize(auc = mean(all.auc,na.rm=TRUE), balance_acc = mean(all.bal.acc,na.rm=TRUE), mcc = mean(all.mcc,na.rm=TRUE), f1 = mean(all.f1,na.rm=TRUE))
+final.line.level.result = all.result %>% group_by(technique) %>% summarize(auc = round(mean(all.auc,na.rm=TRUE),4), balance_acc = round(mean(all.bal.acc,na.rm=TRUE),4), mcc = round(mean(all.mcc,na.rm=TRUE),4), f1 = round(mean(all.f1,na.rm=TRUE),4))
 
 

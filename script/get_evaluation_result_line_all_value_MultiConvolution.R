@@ -142,6 +142,6 @@ Odeg_SAGE.dp.result = get.line.level.eval.result(prediction_dir_Odeg_SAGE, "Odeg
 all.result = rbind(Odeg.dp.result, Odeg_GCN.dp.result, Odeg_SAGE.dp.result)
 print(is.data.frame(all.result))
 # names(all.result) = c("AUC","MCC","Balance.Accuracy","Recall","F1","Release", "Technique")
-final.line.level.result = all.result %>% group_by(technique) %>% summarize(auc = mean(all.auc,na.rm=TRUE), balance_acc = mean(all.bal.acc,na.rm=TRUE), mcc = mean(all.mcc,na.rm=TRUE), f1 = mean(all.f1,na.rm=TRUE))
+final.line.level.result = all.result %>% group_by(technique) %>% summarize(auc = round(mean(all.auc,na.rm=TRUE),4), balance_acc = round(mean(all.bal.acc,na.rm=TRUE),4), mcc = round(mean(all.mcc,na.rm=TRUE),4), f1 = round(mean(all.f1,na.rm=TRUE),4))
 
 

@@ -88,6 +88,7 @@ class SentenceAttention(nn.Module):
         packed_sents = self.odeg(packed_sents,adj)
         packed_sents = self.odeg(packed_sents,adj)
         packed_sents = self.odeg(packed_sents,adj)
+        packed_sents = self.odeg(packed_sents,adj)
         packed_sents = packed_sents.squeeze(0).squeeze(1)
 
         line_tensor = packed_sents

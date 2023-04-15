@@ -54,8 +54,7 @@ exp_name = args.exp_name
 
 max_train_LOC = 100
 
-prediction_dir = '../output/prediction/DeepLineDP-All/'
-save_model_dir = '../output/model/GCNVul_four/'
+save_model_dir = '../output/model/GCNVul_MultiConvolution/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'
 
@@ -82,7 +81,7 @@ def get_loss_weight(labels):
 
 def train_model(dataset_name):
 
-    loss_dir = '../output/loss/GCNVul_four/'
+    loss_dir = '../output/loss/GCNVul_MultiConvolution/'
     actual_save_model_dir = save_model_dir+dataset_name+'/'
 
     if not exp_name == '':

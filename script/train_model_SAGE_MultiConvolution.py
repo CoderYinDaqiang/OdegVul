@@ -16,7 +16,6 @@ from my_util import *
 
 from odegcn import ODEG
 
-# 模型，损失函数，dataloader的子集(特征和对应的标签)
 torch.manual_seed(0)
 
 arg = argparse.ArgumentParser()
@@ -56,7 +55,7 @@ exp_name = args.exp_name
 max_train_LOC = 100
 
 
-save_model_dir = '../output/model/SAGEVul_six/'
+save_model_dir = '../output/model/SAGEVul_MultiConvolution/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'
 
@@ -83,7 +82,7 @@ def get_loss_weight(labels):
 
 def train_model(dataset_name):
 
-    loss_dir = '../output/loss/SAGEVul_six/'
+    loss_dir = '../output/loss/SAGEVul_MultiConvolution/'
     actual_save_model_dir = save_model_dir+dataset_name+'/'
 
     if not exp_name == '':
@@ -96,7 +95,6 @@ def train_model(dataset_name):
     if not os.path.exists(loss_dir):
         os.makedirs(loss_dir)
 
-    # train:activemq-5.0.0 valid:activemq-5.1.0
     train_rel = all_train_releases[dataset_name]
     valid_rel = all_eval_releases[dataset_name][0]
 
@@ -106,13 +104,9 @@ def train_model(dataset_name):
     train_code2d, train_label = get_code2d_and_label(train_df, True)
     valid_code2d, valid_label = get_code2d_and_label(valid_df, True)
 
-    # train_code3d, train_label = get_code3d_and_label(train_df, True)
-    # valid_code3d, valid_label = get_code3d_and_label(valid_df, True)
-
-    # 解决样本不均衡或类别不均衡问题
     sample_weights = compute_class_weight(class_weight = 'balanced', classes = np.unique(train_label), y = train_label)
 
-    # 赋予不同的权重，样本越少，权重越大，损失值越大，模型更注重少量样本的训练..
+
     weight_dict['defect'] = np.max(sample_weights)
     weight_dict['clean'] = np.min(sample_weights)
     
@@ -123,27 +117,17 @@ def train_model(dataset_name):
     word2vec = Word2Vec.load(word2vec_file_dir)
     print('load Word2Vec for',dataset_name,'finished')
 
-    # 取出训练好的embedding matrix(add zero vector for unknown(<UNK>) tokens)
+
     word2vec_weights = get_w2v_weight_for_deep_learning_models(word2vec, embed_dim)
 
-    vocab_size = len(word2vec.wv.vocab)  + 1 # for unknown tokens 16313+1
+    vocab_size = len(word2vec.wv.vocab)  + 1
 
-    #通过word2vec获得所有token的index（无非就是把code3d中的每一个token变成对应index）
+
     x_train_vec = get_x_vec(train_code2d, word2vec)
     x_valid_vec = get_x_vec(valid_code2d, word2vec)
 
-    # sent代表每一个.java文件，其长度代表着.java中的行数...
-    # 如果一个软件项目有一个java文件行数大于900，那么就让所有文件为900行;如果所有文件都小于900行，那么就让所有文件行数变为最接近900行的文件的行数
-    # max_sent_len = min(max([len(sent) for sent in (x_train_vec)]), max_train_LOC)
-
-    # (1203个.java文件,每个.java文件被填充至900个行,每个行50个token)
     train_dl = get_dataloader(x_train_vec,train_label,batch_size)
-
     valid_dl = get_dataloader(x_valid_vec, valid_label,batch_size)
-    adj = get_adj_frame(batch_size).cuda()
-    # adj = get_adj_ones(batch_size).cuda()
-    # adj = torch.randn((batch_size, batch_size)).cuda()
-
 
     model = HierarchicalAttentionNetwork(
         vocab_size=vocab_size,
@@ -204,9 +188,9 @@ def train_model(dataset_name):
         val_losses = []
 
         model.train()
-        #  (2048,50),(2048)   (131283,50)and(1203)
-        for inputs, labels in train_dl:
 
+        for inputs, labels in train_dl:
+            adj = get_adj_frame(batch_size).cuda()
             inputs_cuda, labels_cuda = inputs.cuda(), labels.cuda()
             output, _, __, ___ = model(inputs_cuda, adj)
 

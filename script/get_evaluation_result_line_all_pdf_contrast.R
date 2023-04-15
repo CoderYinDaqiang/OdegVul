@@ -11,7 +11,7 @@ library(pROC)
 library(effsize)
 library(ScottKnottESD)
 
-save.fig.dir = 'F:/desktop/deep/OdegVul/output/figure_contrast2/'
+save.fig.dir = '../output/figure_contrast/'
 
 dir.create(file.path(save.fig.dir), showWarnings = FALSE)
 
@@ -119,13 +119,13 @@ get.line.level.eval.result = function(prediction.dir, method.name)
 }
 
 
-prediction_dir_Odeg = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-Odeg/'
-prediction_dir_SAGE = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-SAGE/'
-prediction_dir_GAT = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-GAT/'
-prediction_dir_GCN = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-GCN/'
-prediction_dir_DeepLineDP = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-DeepLineDP/'
-prediction_dir_LSTM = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-Lstm/'
-prediction_dir_GGNN = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-GGNN/'
+prediction_dir_Odeg = '../output/prediction/DeepLineDP/within-release-Odeg/'
+prediction_dir_SAGE = '../output/prediction/DeepLineDP/within-release-SAGE/'
+prediction_dir_GAT = '../output/prediction/DeepLineDP/within-release-GAT/'
+prediction_dir_GCN = '../output/prediction/DeepLineDP/within-release-GCN/'
+prediction_dir_DeepLineDP = '../output/prediction/DeepLineDP/within-release-DeepLineDP/'
+prediction_dir_LSTM = '../output/prediction/DeepLineDP/within-release-Lstm/'
+prediction_dir_GGNN = '../output/prediction/DeepLineDP/within-release-GGNN/'
 
 Odeg.dp.result = get.line.level.eval.result(prediction_dir_Odeg, "OdegVul")
 SAGEVul.dp.result = get.line.level.eval.result(prediction_dir_SAGE, "GraphSage")

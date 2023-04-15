@@ -11,10 +11,7 @@ library(pROC)
 library(effsize)
 library(ScottKnottESD)
 
-# save.fig.dir = '../output/figure/'
-save.fig.dir = 'F:/desktop/deep/OdegVul/output/figure/'
-
-
+save.fig.dir = '../output/figure/'
 
 dir.create(file.path(save.fig.dir), showWarnings = FALSE)
 
@@ -121,16 +118,16 @@ get.line.level.eval.result = function(prediction.dir, method.name)
 }
 
 
-prediction_dir_Odeg = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-Odeg/'
-prediction_dir_Odeg_Ablation = 'F:/desktop/deep/OdegVul/output/prediction/DeepLineDP/within-release-Odeg-Ablation/'
-
+prediction_dir_Odeg = '../output/prediction/DeepLineDP/within-release-Odeg/'
+prediction_dir_Odeg_Se = '../output/prediction/DeepLineDP/within-release-Odeg-Se/'
+prediction_dir_Odeg_St = '../output/prediction/DeepLineDP/within-release-Odeg-St/'
 
 Odeg.dp.result = get.line.level.eval.result(prediction_dir_Odeg, "OdegVul")
-Odeg_Ablation.dp.result = get.line.level.eval.result(prediction_dir_Odeg_Ablation, "OdegVul_Ablation")
+Odeg_Se.dp.result = get.line.level.eval.result(prediction_dir_Odeg_Se, "OdegVul_Se")
+Odeg_St.dp.result = get.line.level.eval.result(prediction_dir_Odeg_St, "OdegVul_St")
 
-all.result = rbind(Odeg.dp.result, Odeg_Ablation.dp.result)
+all.result = rbind(Odeg.dp.result, Odeg_Se.dp.result, Odeg_St.dp.result)
 print(is.data.frame(all.result))
-# names(all.result) = c("AUC","MCC","Balance.Accuracy","Recall","F1","Release", "Technique")
 final.line.level.result = all.result %>% group_by(technique) %>% summarize(auc = mean(all.auc,na.rm=TRUE), balance_acc = mean(all.bal.acc,na.rm=TRUE), mcc = mean(all.mcc,na.rm=TRUE), f1 = mean(all.f1,na.rm=TRUE))
 
 

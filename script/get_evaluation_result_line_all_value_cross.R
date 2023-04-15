@@ -11,10 +11,7 @@ library(pROC)
 library(effsize)
 library(ScottKnottESD)
 
-# save.fig.dir = '../output/figure/'
-save.fig.dir = 'F:/desktop/deep/OdegVul/output/figure/'
-
-
+save.fig.dir = '../output/figure/'
 
 dir.create(file.path(save.fig.dir), showWarnings = FALSE)
 
@@ -114,7 +111,7 @@ get.line.level.eval.result = function(prediction.dir, method.name)
 
   return(result.df)
 }
-
+prediction_dir_Odeg = '../output/prediction/DeepLineDP/within-release-Odeg/'
 Odeg.dp.result = get.line.level.eval.result(prediction_dir_Odeg, "OdegVul")
 
 

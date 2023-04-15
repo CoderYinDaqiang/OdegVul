@@ -21,7 +21,7 @@ arg.add_argument('-sent_gru_hidden_dim', type=int, default=32, help='sentence at
 arg.add_argument('-word_gru_num_layers', type=int, default=1, help='number of GRU layer at word level')
 arg.add_argument('-sent_gru_num_layers', type=int, default=1, help='number of GRU layer at sentence level')
 arg.add_argument('-exp_name',type=str,default='')
-arg.add_argument('-target_epochs',type=str,default='30', help='the epoch to load model') #24,25目前最好
+arg.add_argument('-target_epochs',type=str,default='30', help='the epoch to load model')
 arg.add_argument('-dropout', type=float, default=0.2, help='dropout rate')
 
 args = arg.parse_args()
@@ -44,8 +44,8 @@ save_every_epochs = 5
 exp_name = args.exp_name
 
 save_model_dir = '../output/model/OdegVul_MultiConvolution/'
-prediction_dir = '../output/prediction/DeepLineDP/within-OdegVul_MultiConvolution-Odeg-four/'
-intermediate_output_dir = '../output/intermediate_output/DeepLineDP/within-release/'
+prediction_dir = '../output/prediction/DeepLineDP/within-OdegVul_MultiConvolution-Odeg-MultiConvolution/'
+intermediate_output_dir = '../output/intermediate_output/DeepLineDP/within-release-Odeg-MultiConvolution/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'
 

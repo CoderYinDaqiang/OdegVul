@@ -43,9 +43,9 @@ dropout = args.dropout
 save_every_epochs = 5
 exp_name = args.exp_name
 
-save_model_dir = '../output/model/SAGEVul_six/'
-intermediate_output_dir = '../output/intermediate_output/DeepLineDP/within-release-six/'
-prediction_dir = '../output/prediction/DeepLineDP/within-release-SAGE-six/'
+save_model_dir = '../output/model/SAGEVul_MultiConvolution/'
+intermediate_output_dir = '../output/intermediate_output/DeepLineDP/within-release-MultiConvolution/'
+prediction_dir = '../output/prediction/DeepLineDP/within-release-SAGE-MultiConvolution/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'
 

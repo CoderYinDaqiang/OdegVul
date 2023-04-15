@@ -52,7 +52,6 @@ exp_name = args.exp_name
 
 max_train_LOC = 100
 
-prediction_dir = '../output/prediction/DeepLineDP-All/'
 save_model_dir = '../output/model/OdegVul/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'

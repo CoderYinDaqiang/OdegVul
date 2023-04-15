@@ -7,7 +7,7 @@ from gensim.models import Word2Vec
 
 from tqdm import tqdm
 
-from Model_GCN_MutilConvolution import *
+from DeepLineDP_GAT_model import *
 from my_util import *
 
 torch.manual_seed(0)
@@ -21,7 +21,7 @@ arg.add_argument('-sent_gru_hidden_dim', type=int, default=32, help='sentence at
 arg.add_argument('-word_gru_num_layers', type=int, default=1, help='number of GRU layer at word level')
 arg.add_argument('-sent_gru_num_layers', type=int, default=1, help='number of GRU layer at sentence level')
 arg.add_argument('-exp_name',type=str,default='')
-arg.add_argument('-target_epochs',type=str,default='9', help='the epoch to load model') #
+arg.add_argument('-target_epochs',type=str,default='24', help='the epoch to load model') #
 arg.add_argument('-dropout', type=float, default=0.2, help='dropout rate')
 
 args = arg.parse_args()
@@ -43,9 +43,8 @@ dropout = args.dropout
 save_every_epochs = 5
 exp_name = args.exp_name
 
-save_model_dir = '../output/model/GCNVul_MultiConvolution/'
-intermediate_output_dir = '../output/intermediate_output/DeepLineDP/within-release-MultiConvolution/'
-prediction_dir = '../output/prediction/DeepLineDP/within-release-GCN-MultiConvolution/'
+save_model_dir = '../output/model/GATVul/'
+prediction_dir = '../output/prediction/DeepLineDP-All/within-release-GAT-other/'
 
 file_lvl_gt = '../datasets/preprocessed_data/'
 
@@ -96,66 +95,61 @@ def predict_defective_files_in_releases(dataset_name, target_epochs):
     model = model.cuda()
     model.eval()
 
-    for rel in test_rel:
+    for rel in tqdm(test_rel):
         print('generating prediction of release:', rel)
-        
-        actual_intermediate_output_dir = intermediate_output_dir+rel+'/'
-
-        if not os.path.exists(actual_intermediate_output_dir):
-            os.makedirs(actual_intermediate_output_dir)
 
         test_df = get_df(rel)
     
         row_list = [] # for creating dataframe later...
 
-        for filename, df in tqdm(test_df.groupby('filename')):
+        # file_label = bool(df['file-label'].unique())
+        line_label = test_df['line-label'].tolist()
+        line_number = test_df['line_number'].tolist()
+        filename = test_df['filename'].tolist()
 
+        # is_comments = df['is_comment'].tolist()
 
-            line_label = df['line-label'].tolist()
-            line_number = df['line_number'].tolist()
+        code = test_df['code_line'].tolist()
 
-            code = df['code_line'].tolist()
+        code2d = prepare_code2d(code, True)
 
-            code2d = prepare_code2d(code, True)
+        # code3d = [code2d]
 
+        codevec = get_x_vec(code2d, word2vec)
 
-            codevec = get_x_vec(code2d, word2vec)
+        with torch.no_grad():
+            codevec_padded_tensor = torch.tensor(codevec)
+            adj = get_adj_frame(codevec_padded_tensor.size(0)).cuda()
 
-            save_file_path = actual_intermediate_output_dir+filename.replace('/','_').replace('.java','')+'_'+target_epochs+'_epochs.pkl'
-            
-            if not os.path.exists(save_file_path):
-                with torch.no_grad():
-                    codevec_padded_tensor = torch.tensor(codevec)
+            outputs, word_att_weights, line_att_weight, _ = model(codevec_padded_tensor,adj)
+            # file_prob = output.item()
+            i = 0
+            for output in outputs:
+                # line_prob = output
+                # prediction = bool(round(output.item()))
+                # output = torch.round(output)
+                # prediction = output.bool()
+                cur_line_label = line_label[i]
+                cur_line_number = line_number[i]
+                cur_filename = filename[i]
 
-                    adj = get_adj_ones_frame(codevec_padded_tensor.size(0)).cuda()
+                line_prob = output.item()
+                prediction = bool(round(output.item()))
 
-                    outputs, word_att_weights, line_att_weight, _ = model(codevec_padded_tensor,adj)
+                torch.cuda.empty_cache()
 
-                    i = 0
-                    for output in outputs:
-
-                        cur_line_label = line_label[i]
-                        cur_line_number = line_number[i]
-                        line_prob = output.item()
-                        prediction = bool(round(output.item()))
-
-                        torch.cuda.empty_cache()
-
-
-                        row_dict = {
-                            'project': dataset_name,
-                            'train': train_rel,
-                            'test': rel,
-                            'filename': filename,
-                            'line-number': cur_line_number,
-                            'line-level-ground-truth': cur_line_label,
-                            'prediction-label': prediction,
-                            'prediction-prob': line_prob
-                        }
-                        i = i + 1
-                        row_list.append(row_dict)
-
-
+                row_dict = {
+                    'project': dataset_name,
+                    'train': train_rel,
+                    'test': rel,
+                    'filename': cur_filename,
+                    'line-number': cur_line_number,
+                    'line-level-ground-truth': cur_line_label,
+                    'prediction-label': prediction,
+                    'prediction-prob': line_prob
+                }
+                i = i + 1
+                row_list.append(row_dict)
 
 
         df = pd.DataFrame(row_list)

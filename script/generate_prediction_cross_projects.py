@@ -140,10 +140,9 @@ def predict_defective_files_in_releases(dataset_name, target_epochs):
             code2d = prepare_code2d(code, True)
 
             codevec = get_x_vec(code2d, word2vec)
-            codevec_padded = pad_code(codevec,max_sent_len,limit_sent_len=False, mode='test') 
+            codevec_padded_tensor = torch.tensor(codevec)
 
             with torch.no_grad():
-                codevec_padded_tensor = torch.tensor(codevec_padded)
                 adj = get_adj_ones(codevec_padded_tensor.size(0)).cuda()
                 outputs, word_att_weights, line_att_weight, _ = model(codevec_padded_tensor, adj)
 

@@ -16,7 +16,7 @@ from my_util import *
 
 from odegcn import ODEG
 
-torch.manual_seed(0)
+
 
 arg = argparse.ArgumentParser()
 

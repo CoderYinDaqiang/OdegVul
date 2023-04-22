@@ -14,7 +14,7 @@ from sklearn.utils import compute_class_weight
 from Model_BiLstm import *
 from my_util import *
 
-torch.manual_seed(0)
+
 
 arg = argparse.ArgumentParser()
 

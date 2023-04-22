@@ -9,7 +9,6 @@ from tqdm import tqdm
 from Model_Odeg import *
 from my_util import *
 
-torch.manual_seed(0) 
 
 
 all_eval_rels_cross_projects = {

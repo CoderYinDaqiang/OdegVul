@@ -14,7 +14,6 @@ from sklearn.utils import compute_class_weight
 from Model_Odeg_St import *
 from my_util import *
 
-torch.manual_seed(0)
 
 arg = argparse.ArgumentParser()
 

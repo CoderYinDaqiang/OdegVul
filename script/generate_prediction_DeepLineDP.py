@@ -10,7 +10,6 @@ from tqdm import tqdm
 from Model_DeepLineDP import *
 from my_util import *
 
-torch.manual_seed(0)
 
 arg = argparse.ArgumentParser()
 

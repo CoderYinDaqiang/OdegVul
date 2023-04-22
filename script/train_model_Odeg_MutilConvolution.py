@@ -15,7 +15,7 @@ from Model_Odeg_MultiConvolution import *
 from my_util import *
 
 
-torch.manual_seed(0)
+
 
 arg = argparse.ArgumentParser()
 

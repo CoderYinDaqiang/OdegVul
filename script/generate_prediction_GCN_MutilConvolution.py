@@ -10,7 +10,7 @@ from tqdm import tqdm
 from Model_GCN_MutilConvolution import *
 from my_util import *
 
-torch.manual_seed(0)
+
 
 arg = argparse.ArgumentParser()
 
